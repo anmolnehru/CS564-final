@@ -1,0 +1,98 @@
+CREATE TABLE Authors
+(  
+    id INT NOT NULL,
+    PRIMARY KEY(id),   
+    name VARCHAR(255)
+);
+CREATE TABLE Books
+(  
+    isbn VARCHAR(15) NOT NULL,   
+    PRIMARY KEY(isbn),
+    name VARCHAR(255),
+    genre VARCHAR(20),
+    count INT,
+    year INT,
+    pages INT
+);
+CREATE TABLE Publishers
+(
+    id INT NOT NULL,
+    PRIMARY KEY(id),
+    name VARCHAR(255),
+    address VARCHAR(255)
+);
+CREATE TABLE Writes
+(
+    book_id VARCHAR(15) NOT NULL,  
+    pub_id INT NOT NULL,  
+    auth_id INT NOT NULL,  
+    PRIMARY KEY (book_id, pub_id, auth_id),  
+    FOREIGN KEY (book_id) REFERENCES Books(isbn) ON UPDATE CASCADE,  
+    FOREIGN KEY (pub_id) REFERENCES Publishers(id) ON UPDATE CASCADE,
+    FOREIGN KEY (auth_id) REFERENCES Authors(id) ON UPDATE CASCADE
+);
+CREATE TABLE Customers
+(
+    id INT NOT NULL,
+    PRIMARY KEY(id),
+    name VARCHAR(255),
+    genre VARCHAR(20),
+    expenses Decimal(9,2)
+);
+CREATE TABLE Sellers
+(
+    id INT NOT NULL,
+    PRIMARY KEY(id),
+    name VARCHAR(255),
+    address VARCHAR(255)
+);
+CREATE TABLE Reviews
+(
+    book_id VARCHAR(15) NOT NULL,  
+    customer_id INT NOT NULL,  
+    review TEXT,
+    rating Decimal(3,2),
+    PRIMARY KEY (book_id, customer_id),  
+    FOREIGN KEY (book_id) REFERENCES Books(isbn) ON UPDATE CASCADE,  
+    FOREIGN KEY (customer_id) REFERENCES Customers(id) ON UPDATE CASCADE
+);
+CREATE TABLE Transactions
+(
+    book_id VARCHAR(15) NOT NULL,  
+    customer_id INT NOT NULL,  
+    seller_id INT NOT NULL,
+    price Decimal(7,2),  
+    PRIMARY KEY (book_id, customer_id),  
+    FOREIGN KEY (book_id) REFERENCES Books(isbn) ON UPDATE CASCADE,  
+    FOREIGN KEY (customer_id) REFERENCES Customers(id) ON UPDATE CASCADE,
+    FOREIGN KEY (seller_id) REFERENCES Sellers(id) ON UPDATE CASCADE
+);
+CREATE TABLE Sells
+(
+    book_id VARCHAR(15) NOT NULL,  
+    seller_id INT NOT NULL,
+    price Decimal(7,2),  
+    PRIMARY KEY (book_id, seller_id),  
+    FOREIGN KEY (book_id) REFERENCES Books(isbn) ON UPDATE CASCADE,  
+    FOREIGN KEY (seller_id) REFERENCES Sellers(id) ON UPDATE CASCADE
+);
+
+delimiter |
+CREATE TRIGGER upcount AFTER INSERT ON Transactions
+  FOR EACH ROW
+  BEGIN
+    UPDATE Books SET count = count + 1 WHERE isbn = NEW.book_id;
+  END;
+|
+delimiter ;
+
+load data local infile '/users/aglankit/cs564/data_files/BooksTable.csv' into table Books fields terminated by ',' lines terminated by '\n' (isbn, name, genre, count, year, pages)  ;
+load data local infile '/users/aglankit/cs564/data_files/AuthorsTable.csv' into table Authors fields terminated by ',' lines terminated by '\n' (id, name);
+load data local infile '/users/aglankit/cs564/data_files/PublishersTable.csv' into table Publishers fields terminated by ',' lines terminated by '\n' (id, name, address);
+load data local infile '/users/aglankit/cs564/data_files/WritesTable.csv' into table Writes fields terminated by ',' lines terminated by '\n' (book_id, pub_id, auth_id);
+load data local infile '/users/aglankit/cs564/data_files/Customer.csv' into table Customers fields terminated by  ',' lines terminated by '\n' (id, name, genre,expenses);
+load data local infile '/users/aglankit/cs564/data_files/Sellers.csv' into table Sellers fields terminated by  ',' lines terminated by '\n' (id, name, address);
+load data local infile '/users/aglankit/cs564/data_files/TransactionTable.csv' into table Transactions fields terminated by  ',' lines terminated by '\n' (book_id,  customer_id, seller_id, price);
+load data local infile '/users/aglankit/cs564/data_files/Sells.csv' into table Sells fields terminated by  ',' lines terminated by '\n' (book_id, seller_id, price);
+load data local infile '/users/aglankit/cs564/data_files/Comments.csv' into table Reviews fields terminated by  '|' lines terminated by '\n' (book_id,  customer_id, review, rating);
+
