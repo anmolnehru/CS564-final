@@ -1,0 +1,16 @@
+//Some max queries
+
+select authors.name,sum(price) from authors,writes,transactions where authors.id=writes.auth_id and writes.book_id=transactions.book_id group by authors.name having sum(price) >= ALL (select sum(price) from authors,writes,transactions where authors.id=writes.auth_id and writes.book_id=transactions.book_id group by authors.name); //Author with maximum revenue
+
+select authors.name,sum(price) from authors,writes,transactions where authors.id=writes.auth_id and writes.book_id=transactions.book_id group by authors.name having sum(price) <= ALL (select sum(price) from authors,writes,transactions where authors.id=writes.auth_id and writes.book_id=transactions.book_id group by authors.name);  //Author with min revenue
+
+// IGNORE not working currently// select books.name,sum(price) from books,transactions where books.isbn=transactions.book_id group by books.name having sum(price) >= ALL (select books.name,sum(price) from books,transactions where books.isbn=transactions.book_id group by books.name having sum(price));  //Books with max revenue
+
+select books.name,sum(price) from books,transactions where books.isbn=transactions.book_id group by books.name order by sum(price) desc limit 10; //Top 10 books by revenue//You can know the top book from here
+
+
+select authors.name,sum(books.count) from authors,books,writes where authors.id=writes.auth_id and writes.book_id=books.isbn group by authors.name order by sum(books.count) desc limit 10;//most popular author by count
+
+select books.name,books.count from books group by books.isbn order by books.count desc limit 10;  //most book by count
+
+select  books.isbn,books.name,books.count,books.genre from books where books.genre='Autography' order by books.count desc limit 10; //most popular book by genre
