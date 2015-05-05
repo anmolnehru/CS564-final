@@ -1,0 +1,26 @@
+//customer query page
+
+select books.isbn,books.name from books where books.name like '%<phpstring>%'; //query by book name //verified //move this to descending order
+
+select books.isbn,books.name,j1.avgrate from books inner join (select reviews.book_id,avg(reviews.rating) AS avgrate from reviews group by reviews.book_id)=j1 on j1.book_id=books.isbn where books.name='%<phpstring>%' order by j1.avgrate desc;//query for searching by book name descending order incoporated
+
+select j1.isbn,j1.name,authors.name from authors inner join (select * from writes inner join books on writes.book_id=books.isbn) = j1 on authors.id=j1.auth_id where authors.name like '%phpstring%'; //query by auth name //verified
+
+select * from authors inner join (select distinct j1.isbn,j1.name,j1.rating,writes.auth_id from writes inner join (select distinct * from books inner join reviews on books.isbn=reviews.book_id)= j1 on writes.book_id=j1.isbn)=j2 on authors.id=j2.auth_id where authors.name like '%faas%' order by j2.rating desc; //query by auth name //order descending books rating
+
+
+select books.isbn,books.name,j1.avgrate from books inner join (select reviews.book_id,avg(reviews.rating) AS avgrate from reviews group by reviews.book_id)=j1 on j1.book_id=books.isbn where books.genre='<phpstring>' order by j1.avgrate desc;//query for searching by genre
+
+ select distinct j2.isbn,j2.book_name,j2.name from sells inner join (select j1.isbn,j1.name as book_name,authors.name from authors inner join (select * from writes inner join books on writes.book_id=books.isbn) = j1 on authors.id=j1.auth_id where authors.name like '%<phpstring>%')=j2 on sells.book_id=j2.isbn where sells.price >= <phpstring> and sells.price<<phpstring>; // outputs one instance of books in that price range to be pushed to the book page //search by authors name
+
+select distinct j1.isbn,j1.name from sells inner join (select books.isbn,books.name from books where books.name like '%sas%')=j1 on sells.book_id=j1.isbn where sells.price >= <phpstring> and sells.price<<phpstring>;  // outputs one instance of books in that price range to be pushed to the book page //search by book name
+
+
+select j2.isbn,j2.name from sells inner join (select books.isbn,books.name,books.genre,j1.avgrate from books inner join (select reviews.book_id,avg(reviews.rating) AS avgrate from reviews group by reviews.book_id)=j1 on j1.book_id=books.isbn where books.genre='comedy' order by j1.avgrate desc)=j2 on sells.book_id=j2.isbn and sells.price>=<phpstring> and sells.price <<phpstring>; // outputs one instance of books in that price range to be pushed to the book page //search by genre
+
+
+
+
+//MOST POPULAR BOOK COUNT // GLOBAL FUNCTION
+
+select books.isbn,books.name,max(count) from books; //didn't add author info as this can be linked to the standard book page with all the relevant info

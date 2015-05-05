@@ -1,0 +1,8 @@
+
+select j3.isbn,j3.book_name,j3.name,j3.genre,j3.pages,j3.year,j3.count,sellers.name,j3.price from sellers,(select  j2.isbn,j2.book_name,j2.name,j2.genre,j2.pages,j2.year,j2.count,sells.seller_id,sells.price from sells inner join (select j1.isbn,j1.name as book_name,j1.genre,j1.pages,j1.year,authors.name,j1.count from authors inner join (select * from writes inner join books on writes.book_id=books.isbn where books.isbn=<phpscript> )  = j1 on authors.id=j1.auth_id)=j2 on sells.book_id=j2.isbn)=j3 where sellers.id=j3.seller_id order by j3.price asc; 
+//based on the isbn input, gives relevant details about the book, no ratings or reviews here, that will be on a unified page
+
+
+select books.isbn,books.name,j1.avgrate from books inner join (select reviews.book_id,avg(reviews.rating) AS avgrate from reviews group by reviews.book_id)=j1 on j1.book_id=books.isbn where books.isbn='<phpscript>' order by j1.avgrate desc; //pure ratings of the book
+
+select books.isbn,books.name,reviews.rating,reviews.review from books inner join  reviews on reviews.book_id=books.isbn where books.isbn='<phpscript>'; //distinct reviews of the book indexed by isbn
