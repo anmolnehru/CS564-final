@@ -2,7 +2,9 @@
 
 select books.isbn,books.name from books where books.name like '%<phpstring>%'; //query by book name //verified //move this to descending order
 
-select books.isbn,books.name,j1.avgrate from books inner join (select reviews.book_id,avg(reviews.rating) AS avgrate from reviews group by reviews.book_id)=j1 on j1.book_id=books.isbn where books.name like '%<phpstring>%' order by j1.avgrate desc;//query for searching by book name descending order incoporated
+(select books.isbn,books.name,j1.avgrate from books inner join (select reviews.book_id,avg(reviews.rating) AS avgrate from reviews group by reviews.book_id)=j1 on j1.book_id=books.isbn where books.name like '%pan%' order by j1.avgrate desc) union (select books.isbn,books.name,NULL from books where books.name like '%panch%'); 
+//query for searching by book name descending order of rating incoporated
+
 
 select j1.isbn,j1.name,authors.name from authors inner join (select * from writes inner join books on writes.book_id=books.isbn) = j1 on authors.id=j1.auth_id where authors.name like '%phpstring%'; //query by auth name //verified
 
