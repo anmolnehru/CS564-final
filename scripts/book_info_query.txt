@@ -6,3 +6,9 @@ select j3.isbn,j3.book_name,j3.name,j3.genre,j3.pages,j3.year,j3.count,sellers.n
 select books.isbn,books.name,j1.avgrate from books inner join (select reviews.book_id,avg(reviews.rating) AS avgrate from reviews group by reviews.book_id)=j1 on j1.book_id=books.isbn where books.isbn='<phpscript>' order by j1.avgrate desc; //pure ratings of the book
 
 select books.isbn,books.name,reviews.rating,reviews.review from books inner join  reviews on reviews.book_id=books.isbn where books.isbn='<phpscript>'; //distinct reviews of the book indexed by isbn
+
+
+
+//Details about a book-book page
+
+select books.*,authors.name from books,authors,writes where books.isbn=writes.book_id and writes.auth_id=authors.id and isbn=<phpstring>;
