@@ -3,8 +3,6 @@ $search_text = htmlspecialchars($_GET["search"]);
 $search_type = htmlspecialchars($_GET["stype"]);
 $price_min = $_GET["price_min"];
 $price_max = $_GET["price_max"];
-$rating_min = $_GET["rating_min"];
-$rating_max = $_GET["rating_max"];
 $name = $_GET["customer_name"];
 
 echo 'Search Query: ' . $search_text;
@@ -17,10 +15,6 @@ if(isset($_GET['price_box'])) {
     echo "</br>";
 }
 
-if(isset($_GET['rating_box'])) {
-    echo 'Min Rating: ' .$rating_min;
-    echo ' Max Rating: ' .$rating_max;
-}
 
 $servername = "localhost";
 $username = "root";
@@ -71,7 +65,7 @@ else if (strcmp($search_type, "book") == 0) {
 	echo "<br/>";
 
         if(isset($_GET['price_box'])) {
-        	$sql = "select distinct isbn, name, price from books, sells where books.name like \"%".$search_text."%\" and books.isbn = sells.book_id and sells.price >=".$price_min." and sells.price <".$price_max;
+        	$sql = "select distinct isbn, name from books, sells where books.name like \"%".$search_text."%\" and books.isbn = sells.book_id and sells.price >=".$price_min." and sells.price <".$price_max;
         } else {
 //        	$sql = "(select books.isbn,books.name,j1.avgrate as avgrate from books left join (select reviews.book_id,avg(reviews.rating) AS avgrate from reviews group by reviews.book_id)=j1 on j1.book_id=books.isbn where books.name like \"%".$search_text."%\" order by j1.avgrate desc)";
 	
@@ -101,7 +95,7 @@ else {
 
 
         if(isset($_GET['price_box'])) {
-               $sql = "select distinct isbn, name, price from books, sells where books.genre like \"%".$search_text."%\" and books.isbn = sells.book_id and sells.price >=".$price_min." and sells.price <".$price_max;	      } else {
+               $sql = "select distinct isbn, name from books, sells where books.genre like \"%".$search_text."%\" and books.isbn = sells.book_id and sells.price >=".$price_min." and sells.price <".$price_max;	      } else {
               $sql = "select books.isbn, books.name from books where books.genre=\"".$search_text."\"";
         }
 

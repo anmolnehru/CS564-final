@@ -73,6 +73,26 @@ Price:
 </fieldset>
 </form>
 
+<form action="delete_submit.php">
+<fieldset>
+Delete Books:
+ISBN:
+<input type="text" name="isbn">
+<input type="submit" value="Submit">
+</fieldset>
+</form>
+
+
+<form action="update_submit.php">
+<fieldset>
+Update Year of Publication:
+ISBN:
+<input type="text" name="isbn">
+Year:
+<input type="text" name="year">
+<input type="submit" value="Submit">
+</fieldset>
+</form>
 
 </body>
 </html>

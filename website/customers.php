@@ -17,8 +17,6 @@ Type Search Query:
 <br>
 <input type="checkbox" name="price_box" value="price"> 
 Price: <input type="number" name="price_min"> Min <input type="number" name="price_max"> Max <br>
-<input type="checkbox" name="rating_box" value="rating">
-Rating: <input type="number" name="rating_min"> Min <input type="number" name="rating_max"> Max <br>
 <input type="hidden" name="customer_name" value="<?php echo $name;?>"/>
 <input type="submit" value="Submit">
 </fieldset>
@@ -37,7 +35,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-
+echo "Most Popular Books (by No. of books sold):";
 $sql = "select name, count from books order by count desc limit 10";
 $result = mysqli_query($conn, $sql);
 
@@ -54,6 +52,7 @@ if (mysqli_num_rows($result) > 0) {
 
 echo "<br>";
 
+echo "Most Popular Authors (by No. of books sold):";
 $sql = "select authors.name, sum(count) as cnt from authors, writes, books where authors.id=writes.auth_id and books.isbn = writes.book_id group by authors.id order by sum(count) DESC limit 10";
 $result = mysqli_query($conn, $sql);
 
