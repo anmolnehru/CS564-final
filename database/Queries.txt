@@ -85,6 +85,16 @@ CREATE TRIGGER upcount AFTER INSERT ON Transactions
   END;
 |
 
+create trigger delbook before delete on Books
+for each row
+Begin        
+delete from Writes where book_id = old.isbn;
+delete from Reviews where book_id = old.isbn;
+delete from Transactions where book_id = old.isbn;
+delete from Sells where book_id = old.isbn;
+end;
+|
+
 CREATE TRIGGER transact Before INSERT ON Transactions
   FOR EACH ROW    
   BEGIN  
