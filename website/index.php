@@ -29,5 +29,14 @@ If you are publisher, enter here:
 </fieldset>
 </form>
 
+<br><br>
+
+<form action="admin.php">
+<fieldset>
+If you are an administrator, enter here:
+<input type="submit" value="Submit">
+</fieldset>
+</form>
+
 </body>
 </html>
